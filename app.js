@@ -4,6 +4,10 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
+require('dotenv').config();
+
+const jwtSecret = process.env.JWT_SECRET;
+
 
 const app = express();
 app.use(cors());
@@ -12,7 +16,7 @@ app.use(bodyParser.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 
-mongoose.connect('mongodb://localhost:27017/your_database', {
+mongoose.connect('mongodb://localhost:27017/sparetime_database', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {

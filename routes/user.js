@@ -1,4 +1,6 @@
 const express = require('express');
+const jwt = require('jsonwebtoken'); // Import the jwt library
+require('dotenv').config();
 const {
   getUserData,
   updateUserData,
@@ -6,14 +8,20 @@ const {
   addInterest,
   deleteInterest
 } = require('../controllers/userController');
+
+const jwtSecret = process.env.JWT_SECRET;
+
 const router = express.Router();
 
 // Middleware to extract userId from token (assuming token is used for authentication)
 const extractUserId = (req, res, next) => {
   // Extract userId from token and set it in req.userId
-  // For simplicity, let's assume we have a function getUserIdFromToken that extracts userId
-  req.userId = getUserIdFromToken(req.headers.authorization);
-  next();
+  try {
+    req.userId = getUserIdFromToken(req.headers.authorization);
+    next();
+  } catch (err) {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
 };
 
 router.use(extractUserId);
@@ -28,8 +36,13 @@ module.exports = router;
 
 // Utility function to extract userId from token (this needs proper implementation)
 function getUserIdFromToken(token) {
-  // Implement your token extraction logic here
-  // For example, using jwt.verify to decode the token and get the userId
-  const decoded = jwt.verify(token, 'your_jwt_secret'); // replace 'your_jwt_secret' with your actual secret
+  if (!token) throw new Error('Token is missing');
+  
+  const tokenParts = token.split(' ');
+  if (tokenParts.length !== 2 || tokenParts[0] !== 'Bearer') {
+    throw new Error('Invalid token format');
+  }
+
+  const decoded = jwt.verify(tokenParts[1], jwtSecret); // replace 'your_jwt_secret' with your actual secret
   return decoded.userId;
 }
