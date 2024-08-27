@@ -6,20 +6,23 @@ import torch
 from transformers import BertTokenizer, BertModel
 from data_collection import make_embedding
 
-def update_average_video_embedding(avg_vid_embedding, total_ratings, new_video, new_rating, num_videos):
+def update_average_video_embedding(avg_vid_embedding, total_ratings, new_video, new_rating):
     total_ratings += new_rating
 
-    if avg_vid_embedding == {}:
+    #Make this check that the avg_vid_embedding is empty
+    if avg_vid_embedding == is an empty array:
         for feature in new_video:
-            avg_vid_embedding[feature] = make_embedding(new_video[feature]) * new_rating
+            #REMOVE THE MAKE EMBEDDING PART FROM BELOW all videos should be embedded already
+            #avg_vid_embedding[feature] = make_embedding(new_video[feature]) * new_rating
     else:
         for feature in avg_vid_embedding:
             old_emb = torch.tensor(avg_vid_embedding[feature])
+            #REMOVE THE MAKE EMBEDDING PART FROM BELOW all videos should be embedded already
             new_emb = make_embedding(new_video[feature])
             new_avg = (old_emb + new_emb*new_rating) / (total_ratings)
             avg_vid_embedding[feature] = new_avg.tolist()
 
-    return [avg_vid_embedding, total_ratings, num_videos+1]
+    return [avg_vid_embedding, total_ratings]
 
 
 
@@ -194,8 +197,8 @@ new_rating2 = 3
 
 embedded_interest = make_embedding(dummy_user["interests"])
 
-dummy_user["average video"], dummy_user["total ratings"] = update_average_video_embedding(dummy_user["average video"], dummy_user["total ratings"], new_video, new_rating, dummy_user["total videos"])
-dummy_user["average video"], dummy_user["total ratings"] = update_average_video_embedding(dummy_user["average video"], dummy_user["total ratings"], new_video2, new_rating2, dummy_user["total videos"])
+dummy_user["average video"], dummy_user["total ratings"] = update_average_video_embedding(dummy_user["average video"], dummy_user["total ratings"], new_video, new_rating)
+dummy_user["average video"], dummy_user["total ratings"] = update_average_video_embedding(dummy_user["average video"], dummy_user["total ratings"], new_video2, new_rating2)
 
 top_3 = get_top_3(videos, dummy_user)
 print(top_3)
