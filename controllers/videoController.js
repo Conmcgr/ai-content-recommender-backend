@@ -1,6 +1,6 @@
 const Video = require('../models/Videos');
 const User = require('../models/Users');
-const model = require('../ml/model.py')
+//const model = require('../ml/model.py')
 
 exports.getTop3 = async (req, res) => {
     try {
@@ -17,3 +17,4 @@ exports.getTop3 = async (req, res) => {
       res.status(500).json({ error: 'Failed to fetch user data' });
     }
   };
+

@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const model = require('../ml/model.py')
+//const model = require('../ml/model.py')
 
 // Get user data
 exports.getUserData = async (req, res) => {
