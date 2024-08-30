@@ -100,35 +100,3 @@ exports.deleteInterest = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete interest' });
   }
 };
-
-
-//Sudo code-y
-exports.rateVideo = async (req, res) => {
-  try {
-    const userId = req.userId;
-    const { video, rating } = req.body;
-
-    const user = await User.findById(userId);
-
-    if (!user) return res.status(404).json({ error: 'User not found' });
-
-    let cur_avg = user.average_video;
-    let cur_rates = user.total_ratings;
-    let cur_tot_vids = user.total_videos;
-
-    try {
-      const output = model.update_average_video_embedding(cur_avg, cur_rates, video, rating);
-    } catch (error) {
-      res.status(500).json({ error: 'Model failed to rate new video' });
-    }
-
-    user.average_video = output[0];
-    user.total_ratings = output[1];
-    user.total_videos = cur_tot_vids + 1;
-
-    await user.save();
-
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to rate video' });
-  }
-}
