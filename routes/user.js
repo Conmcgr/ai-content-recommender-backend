@@ -6,7 +6,8 @@ const {
   updateUserData,
   updatePassword,
   addInterest,
-  deleteInterest
+  deleteInterest,
+  getUserIdInterestsVideo
 } = require('../controllers/userController');
 
 const jwtSecret = process.env.JWT_SECRET;
@@ -31,6 +32,7 @@ router.put('/profile', updateUserData);
 router.post('/update-password', updatePassword);
 router.post('/add-interest', addInterest);
 router.post('/delete-interest', deleteInterest);
+router.get('/id-interests-video', getUserIdInterestsVideo);
 
 module.exports = router;
 

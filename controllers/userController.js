@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const video = require('../models/video');
 //const model = require('../ml/model.py')
 
 // Get user data
@@ -100,3 +101,17 @@ exports.deleteInterest = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete interest' });
   }
 };
+
+exports.getUserIdInterestsVideo = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const user = await User.findById(userId);
+
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    res.status(200).json({ userId: user._id, interests: user.interests, video: user.average_video});
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch user info' });
+  }
+};
+

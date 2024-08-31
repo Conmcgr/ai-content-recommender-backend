@@ -6,7 +6,7 @@ exports.getTop3 = async (req, res) => {
         const pythonServiceResponse = await axios.get('http://localhost:5000/api/top3', {
             headers: { userId: userId }
         });
-        res.status(200).json(pythonServiceResponse.data);
+        res.status(200).json({videoIds: pythonServiceResponse.data});
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch top 3 videos' });
     }
